@@ -1,6 +1,8 @@
 
 # Platform Channels Example
 
+[![CI](https://github.com/eliomacrosales/Simple-Platform-Channels-Example/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/eliomacrosales/Simple-Platform-Channels-Example/actions/workflows/main.yml)
+
 This example shows the implementation of a Platform Channels, where the changes emitted by the GPS of the device are listened to.
 
 
