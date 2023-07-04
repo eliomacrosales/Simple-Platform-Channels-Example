@@ -86,6 +86,10 @@ AppBar(
 
 ```
 
+* [accessibility](https://esflutter.dev/docs/development/accessibility-and-localization/accessibility)
+
+
+
 ### CI/CD
 [![CI](https://github.com/eliomacrosales/Simple-Platform-Channels-Example/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/eliomacrosales/Simple-Platform-Channels-Example/actions/workflows/main.yml)
 
