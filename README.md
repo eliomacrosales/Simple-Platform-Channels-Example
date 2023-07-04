@@ -2,8 +2,6 @@
 # Platform Channels Example
 
 
-[![CI](https://github.com/eliomacrosales/Simple-Platform-Channels-Example/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/eliomacrosales/Simple-Platform-Channels-Example/actions/workflows/main.yml)
-
 This example shows the implementation of a Platform Channels, where the changes emitted by the GPS of the device are listened to.
 
 
@@ -68,6 +66,44 @@ https://github.com/eliomacrosales/Simple-Platform-Channels-Example/assets/583760
 
 https://github.com/eliomacrosales/Simple-Platform-Channels-Example/assets/58376042/879489bd-abf7-4b22-8b81-93ef6e31d207
 
+## Accessibility
+The use of accessibility for people with low vision is shown, through the use of the Semantics widget, which describes the behavior of a specific widget and the user can listen to this information by activating TalkBack on Android and VoiceOver on iOS
+
+```dart
+
+Semantics(
+ label:'botón que inicia o detiene la escucha de la emisión de GPS del dispositivo',
+ child: ElevatedButton(
+
+```
+The ExcludeSemantics widget was also used to hide widgets that would otherwise be read by readers and not need to be read.
+
+```dart
+
+AppBar(
+ title: const ExcludeSemantics(child: Text('Platform Channel Example')),
+      )
+
+```
+
+### CI/CD
+[![CI](https://github.com/eliomacrosales/Simple-Platform-Channels-Example/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/eliomacrosales/Simple-Platform-Channels-Example/actions/workflows/main.yml)
+
+For the continuous integration of the tests, the Github Actions were used and especially the action subosito
+* [subosito-action](https://github.com/subosito/flutter-action)
+```dart
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable' # or: 'beta', 'dev' or 'master'
+    - run: flutter pub get
+    - run: flutter test
+
+```
+
+
 ### Built With
 
 To communicate the client (Flutter) with the hosts (Android/iOS), Java was used for Android and Swift was used for iOS.
@@ -75,7 +111,6 @@ To communicate the client (Flutter) with the hosts (Android/iOS), Java was used 
 * [![Flutter][Flutter.image]][Flutter-url]
 * [![Java][Java.image]][Java-url]
 * [![Swift][Swift.image]][Swift-url]
-
 
 
 
