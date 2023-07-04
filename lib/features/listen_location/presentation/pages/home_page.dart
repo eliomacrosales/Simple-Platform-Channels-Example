@@ -14,7 +14,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Platform Channel Example'),
+        title: const ExcludeSemantics(child: Text('Platform Channel Example')),
       ),
       body: Center(
         child: Consumer<HomeProvider>(
@@ -36,25 +36,29 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 16,
                 ),
-                ElevatedButton(
-                  key: const Key('startAndStopButton'),
-                  onPressed: homeProvider.isPermissionGranted
-                      ? () async {
-                          if (homeProvider.listeningLocation) {
-                            await homeProvider.stoptLocation();
-                          } else {
-                            await homeProvider.startLocation();
+                Semantics(
+                  label:
+                      'botón que inicia o detiene la escucha de la emisión de GPS del dispositivo',
+                  child: ElevatedButton(
+                    key: const Key('startAndStopButton'),
+                    onPressed: homeProvider.isPermissionGranted
+                        ? () async {
+                            if (homeProvider.listeningLocation) {
+                              await homeProvider.stoptLocation();
+                            } else {
+                              await homeProvider.startLocation();
+                            }
                           }
-                        }
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: homeProvider.listeningLocation
-                        ? Colors.red[400]
-                        : Colors.green[400],
+                        : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: homeProvider.listeningLocation
+                          ? Colors.red[400]
+                          : Colors.green[400],
+                    ),
+                    child: homeProvider.listeningLocation
+                        ? const Icon(Icons.stop_rounded)
+                        : const Icon(Icons.play_arrow),
                   ),
-                  child: homeProvider.listeningLocation
-                      ? const Icon(Icons.stop_rounded)
-                      : const Icon(Icons.play_arrow),
                 ),
               ],
             );
