@@ -2,6 +2,8 @@
 # Platform Channels Example
 
 
+
+
 This example shows the implementation of a Platform Channels, where the changes emitted by the GPS of the device are listened to.
 
 
