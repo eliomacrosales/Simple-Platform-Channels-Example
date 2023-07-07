@@ -1,0 +1,28 @@
+PODS:
+  - Flutter (1.0.0)
+  - my_plugin_ios (0.0.1):
+    - Flutter
+  - permission_handler_apple (9.1.0):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - my_plugin_ios (from `.symlinks/plugins/my_plugin_ios/ios`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  my_plugin_ios:
+    :path: ".symlinks/plugins/my_plugin_ios/ios"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
+
+SPEC CHECKSUMS:
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  my_plugin_ios: 9f12307c495021938f9f8b2bd5b5fa7206a6ebdb
+  permission_handler_apple: 8f116445eff3c0e7c65ad60f5fef5490aa94b4e4
+
+PODFILE CHECKSUM: 259418b5db6e6d735320ba7330056b635eee0f86
+
+COCOAPODS: 1.12.1

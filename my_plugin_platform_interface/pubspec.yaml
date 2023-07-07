@@ -1,0 +1,15 @@
+name: my_plugin_platform_interface
+description: A common platform interface for the my_plugin plugin.
+version: 0.1.0+1
+
+environment:
+  sdk: '>=2.18.2 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  plugin_platform_interface: ^2.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter

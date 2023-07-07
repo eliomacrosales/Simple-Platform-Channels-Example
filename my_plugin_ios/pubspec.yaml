@@ -1,0 +1,26 @@
+name: my_plugin_ios
+description: iOS implementation of the my_plugin plugin
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: '>=2.18.2 <3.0.0'
+
+flutter:
+  plugin:
+    implements: gps_plugin
+    platforms:
+      ios:
+        pluginClass: MyPluginPlugin
+        dartPluginClass: MyPluginIOS
+
+dependencies:
+  flutter:
+    sdk: flutter
+  my_plugin_platform_interface:
+    path: ../my_plugin_platform_interface
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  plugin_platform_interface: ^2.0.0
