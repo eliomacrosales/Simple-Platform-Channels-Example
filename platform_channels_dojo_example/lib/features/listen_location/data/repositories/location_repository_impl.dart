@@ -1,8 +1,11 @@
 import 'dart:async';
-import 'package:gps_plugin/my_plugin.dart';
 
 import '../../../../core/permission/permission_handler.dart';
 import '../../domain/repositories/location_repository.dart';
+
+import 'package:my_plugin_platform_interface/my_plugin_platform_interface.dart';
+
+MyPluginPlatform get _platform => MyPluginPlatform.instance;
 
 class LocationRepositoryImpl implements LocationRepository {
   final PermissionHandler permissionHandler;
@@ -12,7 +15,7 @@ class LocationRepositoryImpl implements LocationRepository {
   Stream<Map<String, double>> listenChanges() {
     StreamController<Map<String, double>> streamController =
     StreamController<Map<String, double>>();
-    listenChangesGPS().listen((event) {
+    _platform.listenChangesGPS().listen((event) {
       streamController.add(event.cast<String, double>());
     });
 
@@ -21,11 +24,11 @@ class LocationRepositoryImpl implements LocationRepository {
 
   @override
   Future<void> startLocationGPS() async {
-    await startLocation();
+    await _platform.startLocation();
   }
 
   @override
   Future<void> stopLocationGPS() async {
-    await stopLocation();
+    await _platform.stopLocation();
   }
 }
