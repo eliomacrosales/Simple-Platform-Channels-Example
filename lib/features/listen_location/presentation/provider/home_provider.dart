@@ -14,11 +14,11 @@ class HomeProvider with ChangeNotifier {
   final ListenChangesGPSUseCase listenChangesGPSUseCase;
   final PermissionHandler permissionHandler;
 
-  double? _latitude = 0.0;
-  double? get latitude => _latitude;
+  double _latitude = 0.0;
+  double get latitude => _latitude;
 
-  double? _longitude = 0.0;
-  double? get longitude => _longitude;
+  double _longitude = 0.0;
+  double get longitude => _longitude;
 
   bool _listeningLocation = false;
   bool get listeningLocation => _listeningLocation;
@@ -28,9 +28,9 @@ class HomeProvider with ChangeNotifier {
 
   HomeProvider(
       {required this.startLocationUseCase,
-      required this.stopLocationUseCase,
-      required this.listenChangesGPSUseCase,
-      required this.permissionHandler});
+        required this.stopLocationUseCase,
+        required this.listenChangesGPSUseCase,
+        required this.permissionHandler});
 
   Future<void> startLocation() async {
     _listeningLocation = true;
@@ -46,10 +46,10 @@ class HomeProvider with ChangeNotifier {
 
   Future<void> listenChangesGPS() async {
     Stream<Map<String, double>> myStream =
-        listenChangesGPSUseCase.listenChangesGPS();
+    listenChangesGPSUseCase.listenChangesGPS();
     myStream.listen((data) {
-      _latitude = data["lat"];
-      _longitude = data["lon"];
+      _latitude = data["lat"] ?? 0.0;
+      _longitude = data["lon"] ?? 0.0;
       notifyListeners();
     }, onError: (error) {
 
@@ -63,4 +63,22 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
     return _isPermissionGranted;
   }
+
+  @override
+  int get hashCode {
+    return latitude.hashCode ^
+    longitude.hashCode ^
+    isPermissionGranted.hashCode ^
+    listeningLocation.hashCode;
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is HomeProvider &&
+              runtimeType == other.runtimeType &&
+              latitude == other.latitude &&
+              longitude == other.longitude &&
+              isPermissionGranted == other.isPermissionGranted &&
+              listeningLocation == other.listeningLocation;
 }

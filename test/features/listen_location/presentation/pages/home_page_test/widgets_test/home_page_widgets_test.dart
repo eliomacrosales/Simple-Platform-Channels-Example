@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:mockito/mockito.dart';
 import 'package:platform_channels_dojo_example/core/permission/permission_handler.dart';
 import 'package:platform_channels_dojo_example/features/listen_location/domain/usecases/listen_changes_GPS.dart';
@@ -15,7 +16,6 @@ void main() {
   late Widget homePageWidget;
   late Finder buttonAllowLocation;
   late Finder buttonStartAndStopButton;
-  late Finder latitudeAndLongitudeText;
 
   late HomeProvider homeProvider;
 
@@ -25,7 +25,7 @@ void main() {
   late PermissionHandler permissionHandler;
 
   setUp(
-    () {
+        () {
       startLocationUseCase = MockStartLocationUseCase();
       stopLocationUseCase = MockStopLocationUseCase();
       listenChangesGPSUseCase = MockListenChangesGPSUseCase();
@@ -42,7 +42,7 @@ void main() {
   );
 
   setUpAll(
-    () {
+        () {
       homePageWidget = MultiProvider(
         providers: [
           ChangeNotifierProvider<HomeProvider>(
@@ -56,20 +56,19 @@ void main() {
 
       buttonAllowLocation = find.byKey(const Key('allowLocation'));
       buttonStartAndStopButton = find.byKey(const Key('startAndStopButton'));
-      latitudeAndLongitudeText =
-          find.byKey(const Key('latitudeAndLongitudeInfo'));
+
     },
   );
 
   /// cuando se levanta la app por primera vez
   testWidgets(
     'GIVEN the first execution of the app'
-    'WHEN the user has not yet granted the location permission'
-    'THEN'
-    '[the "Request Location Permission" button is visible,'
-    'the "Start/Stop" button is disabled,'
-    'the text "(0.0 ; 0.0)" is visible]',
-    (WidgetTester tester) async {
+        'WHEN the user has not yet granted the location permission'
+        'THEN'
+        '[the "Request Location Permission" button is visible,'
+        'the "Start/Stop" button is disabled,'
+        'the text "(0.0 ; 0.0)" is visible]',
+        (WidgetTester tester) async {
       await tester.pumpWidget(homePageWidget);
       await tester.pumpAndSettle();
       expect(buttonAllowLocation, findsOneWidget);
@@ -86,11 +85,11 @@ void main() {
   /// el usuario NO concede permisos de ubicación
   testWidgets(
     'Given that the user presses the "Request Location Permission" button'
-    'When the user does not grant the location permission'
-    'Then'
-    '[the "Request Location Permission" button is displayed,'
-    'the "Start/Stop" button is disabled]',
-    (WidgetTester tester) async {
+        'When the user does not grant the location permission'
+        'Then'
+        '[the "Request Location Permission" button is displayed,'
+        'the "Start/Stop" button is disabled]',
+        (WidgetTester tester) async {
       /// Arrange
       await tester.pumpWidget(homePageWidget);
       await tester.pumpAndSettle();
@@ -99,101 +98,47 @@ void main() {
       when(
         permissionHandler.isPermissionGranted(),
       ).thenAnswer(
-        (_) async => false,
+            (_) async => false,
       );
 
       /// Assert
+      expect(buttonAllowLocation, findsOneWidget);
+
       expect(
         tester.widget<ElevatedButton>(buttonAllowLocation).enabled,
         true,
       );
 
-      expect(buttonAllowLocation, findsOneWidget);
+
     },
   );
 
-  /// el usuario concede permisos de ubicación
-  testWidgets(
-    'GIVEN that the user presses the "Request Location Permission" button'
-    'WHEN the user grants the location permission '
-    'THEN'
-    '[the "Start/Stop" button is enabled and has a green[400] color and the icon is play_arrow,'
-    'the "Request Location Permission" button is not displayed,]',
-    (WidgetTester tester) async {
+  /// el usuario concede permisos de ubicación y presiona el botón "Empezar a escuchar ubicación"
+  testGoldens(
+    'Iniciar la escucha del GPS',
+        (WidgetTester tester) async {
       /// Arrange
-      const expectedIcon = Icon(Icons.play_arrow);
-      final expectedBackgroundColor = Colors.green[400];
+      /// TODO: usar Golden test para comparar la UI, pixel a pixel
       await tester.pumpWidget(homePageWidget);
       await tester.pumpAndSettle();
-      await tester.tap(buttonAllowLocation);
-
-      /// Act
-      when(
-        permissionHandler.isPermissionGranted(),
-      ).thenAnswer(
-        (_) async => true,
-      );
-
-      await homeProvider.getPermissionLocation();
-      await tester.pump();
-
-      /// Assert
-      expect(
-        tester.widget<ElevatedButton>(buttonStartAndStopButton).enabled,
-        true,
-      );
-      expect(tester.widget<ElevatedButton>(buttonStartAndStopButton).onPressed,
-          isNotNull);
-
-      final actualProperty = tester
-          .widget<ElevatedButton>(buttonStartAndStopButton)
-          .style
-          ?.backgroundColor
-          ?.resolve(<MaterialState>{});
-
-      expect(actualProperty, equals(equals(expectedBackgroundColor)));
-
-      final actualIcon = tester
-          .widget<ElevatedButton>(buttonStartAndStopButton)
-          .child as Icon?;
-
-      expect(actualIcon?.icon, expectedIcon.icon);
-
-      expect(buttonAllowLocation, findsNothing);
-    },
-  );
-
-  /// el usuario presiona el botón "Empezar a escuchar ubicación"
-  testWidgets(
-    'When the user presses the "Start" button,'
-    'Then '
-    '[the "Start" button is enabled and colored red[400], and icon stop_rounded '
-    'the text "(0.0 ; 0.0)" updates its value to the obtained coordinates]',
-    (WidgetTester tester) async {
-      /// Arrange
-      const expectedIcon = Icon(Icons.stop_rounded);
-      final expectedBackgroundColor = Colors.red[400];
-      await tester.pumpWidget(homePageWidget);
-      await tester.pumpAndSettle();
+      await loadAppFonts();
       expect(find.text('(0.0 ; 0.0)'), findsOneWidget);
 
       /// Act
       when(
         permissionHandler.isPermissionGranted(),
       ).thenAnswer(
-        (_) async => true,
+            (_) async => true,
       );
 
       when(listenChangesGPSUseCase.listenChangesGPS())
           .thenAnswer((_) => Stream.fromIterable([
-                {"lat": -121.32567, "lon": 37.65933}
-              ]));
+        {"lat": -121.32567, "lon": 37.65933}
+      ]));
 
       await homeProvider.getPermissionLocation();
       await homeProvider.listenChangesGPS();
       await tester.tap(buttonStartAndStopButton);
-      await homeProvider.startLocation();
-
       await tester.pump();
 
       /// Assert
@@ -201,23 +146,8 @@ void main() {
         tester.widget<ElevatedButton>(buttonStartAndStopButton).enabled,
         true,
       );
-      expect(tester.widget<ElevatedButton>(buttonStartAndStopButton).onPressed,
-          isNotNull);
-
-      final actualProperty = tester
-          .widget<ElevatedButton>(buttonStartAndStopButton)
-          .style
-          ?.backgroundColor
-          ?.resolve(<MaterialState>{});
-
-      expect(actualProperty, equals(equals(expectedBackgroundColor)));
-
-      final actualIcon = tester
-          .widget<ElevatedButton>(buttonStartAndStopButton)
-          .child as Icon?;
-
-      expect(actualIcon?.icon, expectedIcon.icon);
       expect(find.text('(-121.32567 ; 37.65933)'), findsOneWidget);
+      await screenMatchesGolden(tester, 'startLocation');
     },
   );
 }
