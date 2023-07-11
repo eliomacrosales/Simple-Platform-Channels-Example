@@ -90,6 +90,9 @@ AppBar(
 
 * [accessibility](https://esflutter.dev/docs/development/accessibility-and-localization/accessibility)
 
+### Test
+unit test, widget test and golden test were carried out, for this last case the golden_toolkit package was used in order to compare the desired screen with the running UI.
+To generate the screenshot it was necessary to execute this command "flutter test --update-goldens" and to achieve a clear image this function "await loadAppFonts();"
 
 
 ### CI/CD
